@@ -51,7 +51,7 @@ function TestDocs() {
       <div className="bg-blue-600 p-4 text-white">
         <div className="container mx-auto flex justify-between items-center">
           <img src="https://masmedi-images.s3.ap-south-1.amazonaws.com/logo/Metro%20Diagnostics%20Centre.png" alt="Company Logo" className="w-10 h-10 mr-2" />
-          <h1 className="text-2xl font-bold">Metro Dignostic Centre</h1>
+          <h1 className="text-2xl font-bold">Metro Diagnostics Centre</h1>
         </div>
       </div>
 
