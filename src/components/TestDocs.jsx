@@ -7,7 +7,7 @@ import jsonData from '../API/HealthCare-API.json';
 const columns = [
   { field: 'id', headerName: 'ID', width: 90 },
   { field: 'Test Code', headerName: 'Test Code', width: 150 },
-  { field: 'Test / Profile Name', headerName: 'Test / Profile Name', width: 350 },
+  { field: 'Test / Profile Name', headerName: 'Test / Profile Name', width: 400 },
   { field: 'Patient Fees(Rs.)', headerName: 'Patient Fees(Rs.)', width: 160 },
   { field: 'Test Schedule', headerName: 'Test Schedule', width: 180 },
   { field: 'Reported On', headerName: 'Reported On', width: 150 },
