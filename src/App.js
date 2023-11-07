@@ -1,10 +1,14 @@
 import React from 'react';
+// import Admin from './components/Admin/Admin';
 import TestDocs from './components/TestDocs';
+// import AdminDashboard from './components/Admin/AdminDashboard';
 
 function App() {
   return (
     <>
-      <TestDocs/>
+    {/* <AdminDashboard/> */}
+    <TestDocs/>
+    {/* <Admin/> */}
     </>
   );
 }
