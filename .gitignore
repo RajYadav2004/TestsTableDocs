@@ -110,7 +110,7 @@ dist
 # Docusaurus cache and generated files
 .docusaurus
 /API
-/images
+
 
 # Serverless directories
 .serverless/
@@ -144,3 +144,17 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+images/bio-life-bio-life---1.png
+images/flex (2).png
+src/flex (2) (1).png
+src/components/DialogForm.jsx
+src/components/ErrorSnackbar.jsx
+src/components/ViewDataModel.jsx
+src/components/Admin/Admin.jsx
+.gitignore
+src/components/OpenModal.jsx
+src/components/LoadingSpinner.jsx
+src/components/Admin/Admin.jsx
+src/components/screens/CustomViewButton.jsx
+.gitignore
+src/components/TestDocs.jsx

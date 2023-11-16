@@ -1,14 +1,13 @@
 import React from 'react';
-// import Admin from './components/Admin/Admin';
-import TestDocs from './components/TestDocs';
-// import AdminDashboard from './components/Admin/AdminDashboard';
+import { Route, Routes } from 'react-router-dom';
+import TestsDocs from './components/screens/TestsDocs';
 
 function App() {
   return (
     <>
-    {/* <AdminDashboard/> */}
-    <TestDocs/>
-    {/* <Admin/> */}
+    <Routes>
+      <Route path='/' element={<TestsDocs/>} />
+    </Routes>
     </>
   );
 }

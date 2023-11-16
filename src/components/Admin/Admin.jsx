@@ -25,7 +25,7 @@ const columns = [
   { field: 'Reported On', headerName: 'Reported On', width: 150 },
   { field: 'Method', headerName: 'Method', width: 150 },
   { field: 'Test Status', headerName: 'Test Status', width: 150 },
-  { field: 'actions', headerName: 'Actions', width: 150, sortable:false },
+  { field: 'actions', headerName: 'Actions', width: 150, sortable: false },
 ];
 
 const initialFormData = {
@@ -37,6 +37,7 @@ const initialFormData = {
   'Reported On': '',
   'Method': '',
   'Test Status': '',
+  'Actions': '',
 };
 
 function Admin() {
@@ -44,9 +45,11 @@ function Admin() {
   const [data, setData] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const [errors, setErrors] = useState({});
-  const [requiredRows, setRequiredRows] = useState([]);
-  const [loading, setLoading ]= useState(true);
+  const [requiredFields, setRequiredFields] = useState([]);
+  const [selectedRowId, setSelectedRowId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Load data from an API when the component mounts
@@ -70,20 +73,29 @@ function Admin() {
   const handleOpenCreateDialog = () => {
     setFormData(initialFormData);
     setCreateDialogOpen(true);
-    setRequiredRows([...columns]);
+    setRequiredFields(columns.map((col) => col.field));
+    // setRequiredRows([...columns]);
+  };
+
+  const handleOpenEditDialog = (row) => {
+    setFormData(row);
+    setSelectedRowId(row.id);
+    setEditDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
     setCreateDialogOpen(false);
+    setEditDialogOpen(false);
     setErrors({});
+    setSelectedRowId(null);
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-    requiredRows.forEach((column) => {
-      if (!formData[column.field]) {
-        newErrors[column.field] = `${column.headerName} is required`;
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = `${field} is required`;
       }
     });
 
@@ -94,11 +106,27 @@ function Admin() {
 
   const handleCreate = () => {
     if (validateForm()) {
-      const id = data.length === 0 ? 1 : Math.max(...data.map((row) => row.id)) + 1;
-      setData([...data, { id, ...formData }]);
+      // const id = data.length === 0 ? 1 : Math.max(...data.map((row) => row.id)) + 1;
+      // setData([...data, { id, ...formData }]);
+      const newId = data.length > 0 ? Math.max(...data.map((item) => item.id)) + 1 : 1;
+      const newData = [...data, { id: newId, ...formData }];
+      setData(newData);
       setCreateDialogOpen(false);
     }
   };
+
+  const handleUpdate = () => {
+    if (validateForm()) {
+      const updatedData = data.map((item) => (item.id === selectedRowId ? formData : item));
+      setData(updatedData);
+      setEditDialogOpen(false);
+    }
+  };
+
+  const handleDelete = (id) => {
+    const filteredData = data.filter((item) => item.id !== id);
+    setData(filteredData);
+  }
 
   const handleSearch = (e) => {
     const searchValue = e.target.value;
@@ -113,7 +141,7 @@ function Admin() {
   };
 
   return (
-    <Grid container spacing={2}>
+    <div className='container mx-auto'>
       <Grid item xs={12}>
         <Paper elevation={3} style={{ padding: 16 }}>
           <Grid container spacing={2} alignItems="center">
@@ -126,7 +154,7 @@ function Admin() {
                 onChange={handleSearch}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment position="end">
                       <Search />
                     </InputAdornment>
                   ),
@@ -145,12 +173,35 @@ function Admin() {
             </Grid>
           </Grid>
           {loading ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+            // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+            <div className='flex justify-center items-center h-96'>
               <CircularProgress />
             </div>
           ) : (
             <DataGrid
-              rows={data}
+              rows={data.map((row) => ({
+                ...row,
+                actions: (
+                  <div className='flex space-x-2'>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      size='small'
+                      onClick={() => handleOpenEditDialog(row)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      size='small'
+                      onClick={() => handleDelete(row.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )
+              }))}
               columns={columns.map((column) => ({
                 ...column,
                 renderCell: (params) => (
@@ -166,7 +217,7 @@ function Admin() {
       <Dialog open={isCreateDialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Create Row</DialogTitle>
         <DialogContent>
-          {requiredRows.map((column) => (
+          {requiredFields.map((column) => (
             <TextField
               key={column.field}
               label={column.headerName}
@@ -185,7 +236,35 @@ function Admin() {
           </DialogActions>
         </DialogContent>
       </Dialog>
-    </Grid>
+
+      <Dialog open={isEditDialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Edit Row</DialogTitle>
+        <DialogContent>
+          {columns.map((col) => (
+            <TextField
+              key={col.field}
+              label={col.headerName}
+              value={formData[col.field]}
+              onChange={(e) => setFormData({ ...formData, [col.field]: e.target.value })}
+              fullWidth
+              error={errors[col.field]}
+              helperText={errors[col.field] && (
+                <Typography variant='caption' className='text-red-500'>
+                  {errors[col.field]}
+                </Typography>
+              )}
+            >
+            </TextField>
+          ))}
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleUpdate} variant='contained' color='primary'>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+    </div>
   );
 }
 
