@@ -4,39 +4,24 @@ import jsonData from "../../API/HealthCare-API.json";
 import SearchBar from "./SearchBar";
 import TestGrid from "./TestGrid";
 import ViewModal from "./ViewModal";
-import { Button } from "@mui/material";
-
 const columns = [
-  { field: "id", headerName: "ID", width: 90 },
-  { field: "Test Code", headerName: "Test Code", width: 150 },
+  { field: "Sr No", headerName: "Sr No", width: 60 },
+  { field: "Test Code", headerName: "Test Code" },
   {
     field: "Test / Profile Name",
-    headerName: "Test / Profile Name",
-    width: 500,
+    headerName: "Test Name",
+    width: 720,
   },
-  { field: "Patient Fees(Rs.)", headerName: "Patient Fees(Rs.)", width: 160 },
-  { field: "Test Schedule", headerName: "Test Schedule", width: 180 },
-  { field: "Reported On", headerName: "Reported On", width: 150 },
-  { field: "Method", headerName: "Method", width: 150 },
-  { field: "Test Status", headerName: "Test Status", width: 150 },
+  { field: "Patient Fees(Rs.)", headerName: "MRP" },
+  { field: "Discount (%)", headerName: "Discount (%)", width: 130 },
+  // { field: "Test Schedule", headerName: "Test Schedule", width: 180 },
+  // { field: "Reported On", headerName: "Reported On", width: 150 },
+  // { field: "Method", headerName: "Method", width: 150 },
+  // { field: "Test Status", headerName: "Test Status", width: 150 },
   {
     field: "View Status",
     headerName: "View Status",
     width: 100,
-    renderCell: (params) => {
-      const handleViewClick = () => {
-        // Handle view button clicks
-        console.log("View button clicked", params.row);
-        // You can show a modal or update the state to display information
-      };
-      return (
-        <div>
-          <Button type="button" onClick={handleViewClick}>
-            View
-          </Button>
-        </div>
-      );
-    },
   },
 ];
 
@@ -83,6 +68,8 @@ function TestsDocs() {
     );
     setFilteredData(filtered);
   };
+
+
 
   const handleViewClick = (params) => {
     setSelectedRowData(params.row);
